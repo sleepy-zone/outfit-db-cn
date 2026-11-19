@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>服装提示词库 · ChiHAL 精选（16 套 · 中文）</title>
+<meta name="description" content="AI 服装设计师 ChiHAL（@chihal_ai0509）的 16 套精选设计：设计规格板 + 试穿效果 + 可逐条复制的服装提示词（中文整理）。">
+<link rel="stylesheet" href="assets/style.css?v=3">
+</head>
+<body>
+<header><div class="wrap">
+  <div class="head-row">
+    <h1>服装提示词库<span id="headStat">ChiHAL 精选 16 套 · 9 类风格</span></h1>
+    <div class="head-actions">
+      <div class="tips-hover" id="tipsHover">
+        <button class="tips-trigger" id="tipsTrigger" aria-expanded="false" aria-controls="tipsPanel"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.5C10.5 5 8.5 4.5 6 4.5H3v13h3c2.5 0 4.5.5 6 2 1.5-1.5 3.5-2 6-2h3v-13h-3c-2.5 0-4.5.5-6 2Z"/><path d="M12 6.5v13"/></svg>用法</button>
+        <div class="tips-panel" id="tipsPanel" role="dialog" aria-label="使用说明">
+          <ul>
+            <li><b>这是什么</b>：AI 服装设计师 ChiHAL 的原创服饰精选。每套都有一张设计规格板（正背面裁片 / 色卡 / 面料小样 / 细节特写），加 1–4 张试穿图，和一条按部位分栏的完整服装提示词。</li>
+            <li><b>怎么用</b>：点开任意一套 → 右侧提示词按「上装 / 下装 / 腿部 / 鞋履 / 配饰 / 材质与细节」分栏，可整段复制，也可只复制喜欢的那一栏，替换掉自己提示词里对应的服装段落。</li>
+            <li><b>能直接出图吗</b>：提示词只描述<b>衣服</b>，不含人物、模型、seed。要出图请把它拼到你自己的角色提示词后面；想要人物一致性，把服装段落当「可变行」，人物段落保持不变。</li>
+            <li><b>规格板</b>：弹窗左上角可以切换「规格板 / 试穿图」。规格板适合喂给模型做结构参考，也适合当设计拆解的读材料。</li>
+            <li><b>来源</b>：全部来自 <a href="https://x.com/chihal_ai0509" target="_blank" rel="noopener">@chihal_ai0509</a> 的公开推文，本站只做中文整理与检索，原图请到原帖获取。</li>
+          </ul>
+        </div>
+      </div>
+      <a class="sister" id="sisterLink" href="https://x.com/chihal_ai0509" target="_blank" rel="noopener"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v12H8l-4 4V4Z"/></svg>作者原帖<svg class="ico ico-ext" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6"/><path d="m20 4-9 9"/><path d="M20 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h5"/></svg></a>
+    </div>
+  </div>
+  <nav class="nav" id="nav"></nav>
+</div></header>
+
+<div class="tools"><div class="wrap"><div id="toolbar"></div></div></div>
+
+<main><div class="wrap"><div class="grid" id="grid"></div></div></main>
+
+<footer><div class="wrap">
+  <p class="foot-intro">同一个设计师，16 套风格互不重叠的原创服饰：街头打底，往上叠朋克、新中式、Y2K、迪斯科、芭蕾核、赛车、裁缝。每套都配一张设计规格板和一份写到面料、门襟、衬里层级的提示词。</p>
+  <div class="links">
+    <a class="btn" href="https://x.com/chihal_ai0509" target="_blank" rel="noopener">作者 @chihal_ai0509 ↗</a>
+    <a class="btn" href="https://x.com/chihal_ai0509/status/2123381494806667271" target="_blank" rel="noopener">最新一套（No.038）↗</a>
+    <a class="btn" href="https://x.com/chihal_ai0509/media" target="_blank" rel="noopener">作者图集 ↗</a>
+  </div>
+  <b>素材来源</b>：ChiHAL／AI服飾デザイナー（<a href="https://x.com/chihal_ai0509" target="_blank" rel="noopener">@chihal_ai0509</a>）。本站为个人使用的中文检索界面，只保留缩略图，原图与原帖请通过页面链接跳转获取。<br>
+  <b>说明</b>：提示词由作者日文原文整理、分栏并译成中文，未改动技术细节；如有出入以原帖为准。
+</div></footer>
+
+<div class="modal" id="modal">
+  <div class="mbox">
+    <div class="mimg">
+      <img id="mimg" alt="">
+      <button class="nav-arrow l" id="mprev" aria-label="上一张">‹</button>
+      <button class="nav-arrow r" id="mnext" aria-label="下一张">›</button>
+      <div class="mthumbs" id="mthumbs"></div>
+    </div>
+    <aside class="mside">
+      <div class="mhead"><h2 id="mtitle"></h2><button class="close" id="mclose" aria-label="关闭">×</button></div>
+      <div class="msub" id="msub"></div>
+      <dl class="kv" id="mfields"></dl>
+      <div class="sect">设计要点</div>
+      <p class="note" id="mnote"></p>
+      <div class="sect">复用建议</div>
+      <p class="note" id="muse"></p>
+      <div class="sect">服装提示词 <button class="mini-copy" id="mcopyall" type="button">复制全部</button></div>
+      <div id="mprompt"></div>
+      <div class="acts">
+        <button id="mcopy" class="primary">复制整套结构（带分栏标题）</button>
+        <a id="mpost" href="#" target="_blank" rel="noopener">打开原帖（看图／原提示词）↗</a>
+        <button id="mformula">复制风格公式</button>
+      </div>
+      <div class="keys"><kbd>←</kbd><kbd>→</kbd> 上一张 / 下一张 · <kbd>Esc</kbd> 关闭</div>
+    </aside>
+  </div>
+</div>
+
+<script src="config.js?v=1"></script>
+<script src="data.js?v=4"></script>
+<script src="assets/analytics.js?v=1"></script>
+<script src="assets/app.js?v=2"></script>
+</body>
+</html>
