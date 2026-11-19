@@ -4,13 +4,17 @@ AI 服装设计师 **ChiHAL／AI服飾デザイナー**（[@chihal_ai0509](https
 
 **16 套 · 9 类风格 · 104 段提示词 · 15,483 字**
 
+**在线访问**：<https://sleepyzone.online/outfit-db-cn/> · 仓库：<https://github.com/sleepy-zone/outfit-db-cn>
+
 - 作者 2026-11-01 出道，19 天发了 38 套编号设计（No.001–038），每套 = 主帖 + 图 + 一条按部位分栏的服装提示词
 - 这里按**风格不重叠**挑出 16 套（朋克 / 新中式 / 学院运动 / 户外工装 / Y2K / 未来科技 / 夜场华丽 / 芭蕾核 / 高定裁缝）
 - 每套保留：设计规格板、试穿图、风格公式、配色、单品拆解、完整提示词（分栏 + 可逐段复制）
 
 ## 打开方式
 
-直接双击 **index.html** 即可（thumbs/ 和 preview/ 要在同目录），不需要起服务器。
+线上直接访问 <https://sleepyzone.online/outfit-db-cn/>（GitHub Pages，仓库 `main` 分支根目录自动发布）。
+
+本地也可以直接双击 **index.html**（thumbs/ 和 preview/ 要在同目录），不需要起服务器。
 
 想用 http 打开：
 
