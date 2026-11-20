@@ -326,6 +326,9 @@
       return;
     }
     var secs = ITEMS.reduce(function (n, x) { return n + (x.sections || []).length; }, 0);
+    var imgs = ITEMS.reduce(function (n, x) { return n + 1 + (x.looks || []).length; }, 0);
+    var dlStat = document.getElementById("dlStat");
+    if (dlStat) dlStat.textContent = ITEMS.length + " 套 / " + imgs + " 张原图";
     $("#headStat").textContent =
       "ChiHAL 精选 " + ITEMS.length + " 套 · " + (DB.families || []).length + " 类风格 · " + secs + " 段提示词";
     renderNav();
