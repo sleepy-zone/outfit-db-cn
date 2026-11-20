@@ -276,7 +276,31 @@
   }
 
   /* ---------------- events ---------------- */
+  function setDownloadOpen(open) {
+    var btn = $("#dlBtn"), panel = $("#dlPanel");
+    if (!btn || !panel) return;
+    btn.setAttribute("aria-expanded", open ? "true" : "false");
+    panel.hidden = !open;
+    if (open) track("download_open", { label: "image-pack" });
+  }
+
   function bind() {
+    var dlBtn = $("#dlBtn"), dlPanel = $("#dlPanel");
+    if (dlBtn && dlPanel) {
+      dlBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        setDownloadOpen(dlPanel.hidden);
+      });
+      document.addEventListener("click", function (e) {
+        if (!dlPanel.hidden && !$("#dl").contains(e.target)) setDownloadOpen(false);
+      });
+      [].forEach.call(dlPanel.querySelectorAll("[data-provider]"), function (link) {
+        link.addEventListener("click", function () {
+          track("download_click", { provider: link.getAttribute("data-provider"), label: "image-pack" });
+          setDownloadOpen(false);
+        });
+      });
+    }
     $("#mclose").addEventListener("click", close);
     $("#modal").addEventListener("click", function (e) {
       if (e.target.id === "modal") close();
@@ -299,6 +323,10 @@
       track("copy", { type: "formula", value: cur.item.num });
     });
     document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") {
+        var panel = $("#dlPanel");
+        if (panel && !panel.hidden) { setDownloadOpen(false); return; }
+      }
       if (!$("#modal").classList.contains("on")) return;
       if (e.key === "Escape") close();
       if (e.key === "ArrowLeft") setImg(cur.idx - 1);
@@ -329,6 +357,10 @@
     var imgs = ITEMS.reduce(function (n, x) { return n + 1 + (x.looks || []).length; }, 0);
     var dlStat = document.getElementById("dlStat");
     if (dlStat) dlStat.textContent = ITEMS.length + " 套 / " + imgs + " 张原图";
+    var dlSub = document.getElementById("dlSub");
+    if (dlSub) dlSub.textContent = ITEMS.length + " 套原图 + 提示词";
+    var dlHead = document.getElementById("dlHead");
+    if (dlHead) dlHead.textContent = ITEMS.length + " 套 / " + imgs + " 张原图 + 分栏提示词";
     $("#headStat").textContent =
       "ChiHAL 精选 " + ITEMS.length + " 套 · " + (DB.families || []).length + " 类风格 · " + secs + " 段提示词";
     renderNav();
