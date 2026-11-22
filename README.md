@@ -83,12 +83,22 @@ outfit-db-cn/
 
 ## 埋点
 
-`config.js` 里的 `window.ANALYTICS.providers` 默认为空 = 完全关闭，只在本地 `window.__trackLog` 留最近 200 条。
+和 [char-db-cn](https://github.com/sleepy-zone/char-db-cn) / ai-ref-library-cn 共用同一个 Clarity 项目 `r1wmvdsf4a`，报表里按 URL 过滤（包含 `outfit-db-cn`）就能只看本站，热图本来就按 URL 分开。
 
-若要接入，填法和 char-db-cn 一致（Clarity 项目 `r1wmvdsf4a`，报表按 URL 过滤 `outfit-db-cn`）：
+配置在 `config.js`，清空 `providers` 即完全关闭（只留本地 `window.__trackLog`）。调试：控制台 `window.__trackDebug = true` 后刷新可看实时事件。
 
-```js
-window.ANALYTICS = { providers: [{ provider: "clarity", id: "r1wmvdsf4a" }] };
-```
+所有事件都带 `lib: "outfit"` 标签，方便和其他库区分：
 
-上报事件：`filter` / `search` / `random` / `item_open` / `copy`。
+| 事件 | 触发 | 主要参数 |
+|---|---|---|
+| `lib_view` | 首屏加载 | `label: outfit-db-cn` |
+| `filter` | 切风格分类 | `type: family`、`value: 分类名` |
+| `search` | 搜索（>1 字，去抖） | `q`（截 40 字） |
+| `random` | 随机一套 | — |
+| `item_open` | 打开弹窗 | `id: No.`、`label: 中文名`、`value: 分类` |
+| `image_view` | 切换规格板 / 试穿图 | `id`、`type: board\|look` |
+| `copy` | 复制 | `type: section\|structured\|plain\|formula`、`label: 栏名`、`id` |
+| `download_open` | 打开图包面板 | `label: image-pack` |
+| `download_click` | 点网盘按钮 | `label: xunlei\|uc` |
+
+外链点击（GitHub、X、网盘）由 Clarity 的「出站点击」自动统计，不再手动埋点。

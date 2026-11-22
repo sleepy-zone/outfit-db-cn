@@ -15,7 +15,12 @@
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
     });
   };
-  var track = function (name, params) { if (window.track) window.track(name, params); };
+  var LIB = "outfit";
+  var track = function (name, params) {
+    try {
+      if (window.track) window.track(name, Object.assign({ lib: LIB }, params || {}));
+    } catch (e) { /* 埋点不能影响主流程 */ }
+  };
 
   /* ---------------- state ---------------- */
   var state = { family: "all", q: "" };
@@ -73,7 +78,7 @@
       clearTimeout(t);
       t = setTimeout(function () {
         renderGrid();
-        if (state.q.length > 1) track("search", { value: state.q });
+        if (state.q.length > 1) track("search", { q: state.q.slice(0, 40) });
       }, 120);
     });
     input.addEventListener("keydown", function (e) {
@@ -202,7 +207,7 @@
       btn.type = "button";
       btn.addEventListener("click", function () {
         copy(s.t, btn, "复制");
-        track("copy", { type: "section", value: it.num + ":" + s.k });
+        track("copy", { type: "section", label: s.k, id: it.num });
       });
       head.appendChild(btn);
       box.appendChild(head);
@@ -230,13 +235,16 @@
     $("#modal").classList.add("on");
     document.body.style.overflow = "hidden";
     $("#mclose").focus();
-    track("item_open", { id: it.num, value: it.name, label: it.family });
+    track("item_open", { id: it.num, label: it.nameZh, value: it.family });
+    track("image_view", { id: it.num, type: "board", value: "规格板" });
     if (history.replaceState) history.replaceState(null, "", "#" + it.num);
   }
 
   function setImg(i) {
     if (!cur) return;
     cur.idx = (i + cur.imgs.length) % cur.imgs.length;
+    var kind = cur.idx === 0 ? "board" : "look";
+    track("image_view", { id: cur.item.num, type: kind, value: kind === "board" ? "规格板" : "试穿" });
     $("#mimg").src = cur.imgs[cur.idx].src;
     [].forEach.call(document.querySelectorAll("#mthumbs button"), function (b, k) {
       b.classList.toggle("on", k === cur.idx);
@@ -296,7 +304,7 @@
       });
       [].forEach.call(dlPanel.querySelectorAll("[data-provider]"), function (link) {
         link.addEventListener("click", function () {
-          track("download_click", { provider: link.getAttribute("data-provider"), label: "image-pack" });
+          track("download_click", { label: link.getAttribute("data-provider"), type: "image-pack" });
           setDownloadOpen(false);
         });
       });
@@ -310,17 +318,17 @@
     $("#mcopy").addEventListener("click", function () {
       if (!cur) return;
       copy(promptText(cur.item, true), this, "复制整套结构（带分栏标题）");
-      track("copy", { type: "all", value: cur.item.num });
+      track("copy", { type: "structured", id: cur.item.num });
     });
     $("#mcopyall").addEventListener("click", function () {
       if (!cur) return;
       copy(promptText(cur.item, false), this, "复制全部");
-      track("copy", { type: "plain", value: cur.item.num });
+      track("copy", { type: "plain", id: cur.item.num });
     });
     $("#mformula").addEventListener("click", function () {
       if (!cur) return;
       copy(cur.item.formula + " / " + cur.item.formulaZh, this, "复制风格公式");
-      track("copy", { type: "formula", value: cur.item.num });
+      track("copy", { type: "formula", id: cur.item.num });
     });
     document.addEventListener("keydown", function (e) {
       if (e.key === "Escape") {
@@ -367,6 +375,7 @@
     renderToolbar();
     renderGrid();
     bind();
+    track("lib_view", { label: "outfit-db-cn" });
     var h = location.hash.replace("#", "");
     if (h) {
       var hit = ITEMS.find(function (x) { return x.num === h; });
