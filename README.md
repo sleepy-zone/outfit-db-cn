@@ -2,12 +2,12 @@
 
 AI 服装设计师 **ChiHAL／AI服飾デザイナー**（[@chihal_ai0509](https://x.com/chihal_ai0509)）的原创服饰精选库，做成和 [char-db-cn](https://github.com/sleepy-zone/char-db-cn) 一样的检索界面。
 
-**23 套 · 12 类风格 · 151 段提示词 · 23,444 字**
+**29 套 · 12 类风格 · 193 段提示词 · 30,571 字**
 
 **在线访问**：<https://sleepyzone.online/outfit-db-cn/> · 仓库：<https://github.com/sleepy-zone/outfit-db-cn>
 
 - 作者 2026-11-01 出道，19 天发了 38 套编号设计（No.001–038），每套 = 主帖 + 图 + 一条按部位分栏的服装提示词
-- 这里按**风格不重叠**挑出 23 套（朋克 / 新中式 / 学院运动 / 户外工装 / Y2K / 未来科技 / 夜场华丽 / 芭蕾核 / 高定裁缝 / 复古流行 / 军装机能 / 法式日常）
+- 这里按**风格不重叠**挑出 29 套（朋克 / 新中式 / 学院运动 / 户外工装 / Y2K / 未来科技 / 夜场华丽 / 芭蕾核 / 高定裁缝 / 复古流行 / 军装机能 / 法式日常）
 - 每套保留：设计规格板、试穿图、风格公式、配色、单品拆解、完整提示词（分栏 + 可逐段复制）
 
 ## 打开方式
@@ -52,7 +52,7 @@ python3 -m http.server 8080
 ```
 outfit-db-cn/
 ├── index.html          # 页面骨架
-├── data.js             # 23 套的全部数据（window.OUTFIT_DB）
+├── data.js             # 29 套的全部数据（window.OUTFIT_DB）
 ├── config.js           # 埋点开关
 ├── assets/
 │   ├── style.css       # 与 char-db-cn 同一套设计语言
@@ -68,7 +68,7 @@ outfit-db-cn/
 
 1. `round-20-scrape.mjs` — 逐帖抓 38 套的主帖 + 回复里的提示词（ego-browser）
 2. `parse.mjs` — 去掉推文外壳，按部位切栏
-3. `curated.mjs` — 人工精选 23 套 + 风格/配色/品类/设计要点/复用建议
+3. `curated.mjs` — 人工精选 29 套 + 风格/配色/品类/设计要点/复用建议
 4. `overrides.mjs` — 两套纯日文提示词的人工中译（No.016、No.036）
 5. `build.mjs` — 生成 `data.js`（图片走 `preview/` `thumbs/`，文件名 `<No.>-<序号>.webp`）
 
