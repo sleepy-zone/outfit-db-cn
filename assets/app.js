@@ -23,7 +23,7 @@
   };
 
   /* ---------------- state ---------------- */
-  var state = { family: "all", q: "" };
+  var state = { family: "all", author: "all", q: "" };
   var activeList = [];
   var cur = null; // { item, imgs:[{src,type}], idx }
 
@@ -57,6 +57,31 @@
   function renderToolbar() {
     var bar = $("#toolbar");
     bar.innerHTML = "";
+
+    var authors = DB.authors || [];
+    if (authors.length > 1) {
+      var arow = el("div", "author-row");
+      arow.appendChild(el("span", "author-label", "作者"));
+      var mkBtn = function (key, label, n, on) {
+        var b = el("button", "author-chip" + (on ? " on" : ""));
+        b.type = "button";
+        b.dataset.author = key;
+        b.innerHTML = esc(label) + "<i>" + n + "</i>";
+        b.addEventListener("click", function () {
+          state.author = key;
+          track("filter", { type: "author", value: key === "all" ? "all" : label });
+          renderToolbar();
+          renderGrid();
+        });
+        return b;
+      };
+      arow.appendChild(mkBtn("all", "全部", ITEMS.length, state.author === "all"));
+      authors.forEach(function (a) {
+        arow.appendChild(mkBtn(a.key, a.name, a.n, state.author === a.key));
+      });
+      bar.appendChild(arow);
+    }
+
     var row = el("div", "row");
     var input = document.createElement("input");
     input.id = "q";
@@ -95,7 +120,7 @@
   function matches(it, q) {
     if (!q) return true;
     var hay = [
-      it.num, it.name, it.nameZh, it.formula, it.formulaZh, it.family,
+      it.num, it.name, it.nameZh, it.formula, it.formulaZh, it.family, it.author,
       (it.styles || []).join(" "), (it.pieces || []).join(" "), it.items, it.note, it.use,
       (it.colors || []).map(function (c) { return c.n; }).join(" "),
       (it.sections || []).map(function (s) { return s.k + " " + s.t; }).join(" "),
@@ -107,6 +132,7 @@
     var grid = $("#grid");
     grid.innerHTML = "";
     activeList = ITEMS.filter(function (it) {
+      if (state.author !== "all" && it.author !== state.author) return false;
       if (state.family !== "all" && it.family !== state.family) return false;
       return matches(it, state.q);
     });
@@ -120,20 +146,24 @@
     activeList.forEach(function (it) {
       var card = el("article", "card");
       card.tabIndex = 0;
-      var ph = el("div", "ph");
+      var ph = el("div", it.author === "sqz" ? "ph ph-wide" : "ph");
       var img = document.createElement("img");
       img.loading = "lazy";
       img.alt = it.nameZh + " · " + it.name;
       img.src = it.board;
       ph.appendChild(img);
-      ph.appendChild(el("span", "badge", "No." + it.num));
+      ph.appendChild(el("span", "badge", (it.author === "sqz" ? "SQZ·" : "No.") + it.num));
       ph.appendChild(el("span", "famtag", esc(it.family)));
+
       card.appendChild(ph);
 
       var meta = el("div", "meta");
       meta.appendChild(el("h3", null, esc(it.nameZh)));
-      meta.appendChild(el("p", "en", esc(it.name)));
+      meta.appendChild(el("p", "en", esc(it.name) + " · " + (it.author === "sqz" ? "SQZ" : "ChiHAL")));
       var tg = el("div", "tg");
+      (it.tags || []).forEach(function (t) {
+        tg.appendChild(el("span", "tagchip", esc(t)));
+      });
       (it.styles || []).slice(0, 2).forEach(function (s) {
         tg.appendChild(el("span", null, esc(s)));
       });
@@ -172,7 +202,7 @@
     cur.imgs = imgs;
 
     $("#mtitle").textContent = it.nameZh;
-    $("#msub").textContent = "No." + it.num + " · " + it.name + " · " + it.date;
+    $("#msub").textContent = (it.author === "sqz" ? "SQZ·" : "No.") + it.num + " · " + it.name + " · " + it.date;
     $("#mimg").src = imgs[cur.idx].src;
     $("#mimg").alt = it.nameZh;
 
@@ -185,6 +215,10 @@
       dd.innerHTML = v;
       f.appendChild(dt); f.appendChild(dd);
     };
+    var authorMeta = (DB.authors || []).find(function (a) { return a.key === it.author; });
+    if (authorMeta) {
+      addRow("作者", '<a href="' + authorMeta.url + '" target="_blank" rel="noopener">' + esc(authorMeta.name) + " " + esc(authorMeta.handle) + " ↗</a>");
+    }
     addRow("风格", esc(it.formulaZh) + '<br><span style="color:#807d72;font-size:11.5px;font-family:var(--mono)">' + esc(it.formula) + "</span>");
     addRow("品类", (it.pieces || []).map(function (p) { return '<span class="chip">' + esc(p) + "</span>"; }).join(" "));
     addRow("配色", (it.colors || []).map(function (c) {
@@ -369,8 +403,9 @@
     if (dlSub) dlSub.textContent = ITEMS.length + " 套原图 + 提示词";
     var dlHead = document.getElementById("dlHead");
     if (dlHead) dlHead.textContent = ITEMS.length + " 套 / " + imgs + " 张原图 + 分栏提示词";
+    var authorTxt = (DB.authors || []).map(function (a) { return a.name + " " + a.n; }).join(" + ");
     $("#headStat").textContent =
-      "ChiHAL 精选 " + ITEMS.length + " 套 · " + (DB.families || []).length + " 类风格 · " + secs + " 段提示词";
+      ITEMS.length + " 套（" + authorTxt + "）· " + (DB.families || []).length + " 类风格 · " + secs + " 段提示词";
     renderNav();
     renderToolbar();
     renderGrid();
@@ -378,7 +413,7 @@
     track("lib_view", { label: "outfit-db-cn" });
     var h = location.hash.replace("#", "");
     if (h) {
-      var hit = ITEMS.find(function (x) { return x.num === h; });
+      var hit = ITEMS.find(function (x) { return x.num === h || x.num.toUpperCase() === h.toUpperCase(); });
       if (hit) open(hit, 0);
     }
   }
