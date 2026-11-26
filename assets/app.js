@@ -152,7 +152,8 @@
       img.alt = it.nameZh + " · " + it.name;
       img.src = it.board;
       ph.appendChild(img);
-      ph.appendChild(el("span", "badge", (it.author === "sqz" ? "SQZ·" : "No.") + it.num));
+      // ChiHAL 的规格板上本来就印着 No.xxx，卡片上不再重复打标；SQZ 的 CODE 保留便于检索
+      if (it.author === "sqz") ph.appendChild(el("span", "badge", "SQZ·" + it.num));
       ph.appendChild(el("span", "famtag", esc(it.family)));
 
       card.appendChild(ph);
@@ -164,9 +165,12 @@
       (it.tags || []).forEach(function (t) {
         tg.appendChild(el("span", "tagchip", esc(t)));
       });
-      (it.styles || []).slice(0, 2).forEach(function (s) {
-        tg.appendChild(el("span", null, esc(s)));
-      });
+      (it.styles || [])
+        .filter(function (s) { return (it.tags || []).indexOf(s) < 0; })
+        .slice(0, 2)
+        .forEach(function (s) {
+          tg.appendChild(el("span", null, esc(s)));
+        });
       meta.insertBefore(tg, null);
       var dots = el("div", "dots");
       (it.colors || []).slice(0, 4).forEach(function (c) {
