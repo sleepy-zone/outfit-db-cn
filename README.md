@@ -5,12 +5,12 @@
 - **ChiHAL／AI服飾デザイナー**（[@chihal_ai0509](https://x.com/chihal_ai0509)）· 35 套 · 街头打底，叠朋克 / 新中式 / Y2K / 迪斯科 / 芭蕾核 / 赛车 / 裁缝
 - **丸顔の猫｜SQZボス／SQUALLUZ**（[@SQZKaicho](https://x.com/SQZKaicho)）· 10 套 · 汽车 × 时尚，赛车、机车、度假泳装、夜场缎面各成系列
 
-**45 套 · 15 类风格 · 300 段提示词 · 2 位设计师**
+**48 套 · 15 类风格 · 321 段提示词 · 2 位设计师**
 
 **在线访问**：<https://sleepyzone.online/outfit-db-cn/> · 仓库：<https://github.com/sleepy-zone/outfit-db-cn>
 
 - 作者 2026-11-01 出道，19 天发了 38 套编号设计（No.001–038），每套 = 主帖 + 图 + 一条按部位分栏的服装提示词
-- 这里按**风格不重叠**挑出 35 套 + SQZ 10 套（朋克 / 新中式 / 学院运动 / 户外工装 / Y2K / 未来科技 / 夜场华丽 / 芭蕾核 / 高定裁缝 / 复古流行 / 军装机能 / 法式日常）
+- 这里按**风格不重叠**挑出 35 套 + SQZ 13 套（朋克 / 新中式 / 学院运动 / 户外工装 / Y2K / 未来科技 / 夜场华丽 / 芭蕾核 / 高定裁缝 / 复古流行 / 军装机能 / 法式日常）
 - 每套保留：设计规格板、试穿图、风格公式、配色、单品拆解、完整提示词（分栏 + 可逐段复制）
 
 ## 打开方式
@@ -55,7 +55,7 @@ python3 -m http.server 8080
 ```
 outfit-db-cn/
 ├── index.html          # 页面骨架
-├── data.js             # 45 套的全部数据（window.OUTFIT_DB）
+├── data.js             # 48 套的全部数据（window.OUTFIT_DB）
 ├── config.js           # 埋点开关
 ├── assets/
 │   ├── style.css       # 与 char-db-cn 同一套设计语言
